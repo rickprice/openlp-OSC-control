@@ -1,18 +1,30 @@
 from typing import Any
+import requests
+from requests.models import auth
+
+
+class OpenLPAuthentication:
+    def __init__(self, OpenLP_url: str, username: str, password: str) -> None:
+        self.openLP_url = OpenLP_url
+        self.username = username
+        self.password = password
+        self.authenticated = False
+        self.authentication_token = None
+
+    def getAuthenticationToken(self) -> str:
+        # FIX: Uhh, need to get a token
+        return "+++BrokenToken+++"
 
 
 class OpenLPControl:
-    def __init__(self, openlpURL: str, username: str, password: str):
+    def __init__( self, authentication: OpenLPAuthentication):
+        self.authentication = authentication
+
         self.controller_themeLevel = ControllerThemeLevel()
         self.controller_currentTheme = ControllerCurrentTheme()
 
         self.plugins_search_options = PluginsSearchOptions()
 
-        # Authentication Bits
-        self.authenticated = False
-        self.username = username
-        self.password = password
-        self.authentication_token = None
 
     def ensure_authenticated(self):
         pass

@@ -1,19 +1,37 @@
 from typing import Any
 import requests
-from requests.models import auth
+import json
+
+# from requests.models import auth
 
 
 class OpenLPAuthentication:
-    def __init__(self, OpenLP_url: str, username: str, password: str) -> None:
-        self.openLP_url = OpenLP_url
+    def __init__(self, openLP_base_url: str, username: str, password: str) -> None:
+        self.openLP_base_url = openLP_base_url
         self.username = username
         self.password = password
-        self.authenticated = False
         self.authentication_token = None
 
     def getAuthenticationToken(self) -> str:
-        # FIX: Uhh, need to get a token
-        return "+++BrokenToken+++"
+        if self.authentication_token is not None:
+            return self.authentication_token
+        else:
+            url = self.openLP_base_url + "api/v2/core/login"
+            # url = self.openLP_base_url + "api/v2/controller/themes"
+            print("Frederick URL: ",url)
+            auth_data = {"username":self.username,"password":self.password}
+            # r = requests.post(url, data = json.dumps(auth_data))
+            r = requests.post(url, json = auth_data)
+            # r = requests.get(url)
+            if r.status_code == requests.codes.ok:
+                print ("returned data:", r.text)
+                # self.authentication_token = r.json()[0]["authentication_token"]
+            else:
+                print("Got return:",r.status_code,r.text)
+            return self.authentication_token
+
+    def getOpenLPBaseURL(self)->str:
+        return self.openLP_base_url
 
 
 class OpenLPControl:
@@ -110,3 +128,10 @@ class PluginsSearchOptions:
 
     def __set__(self, currentTheme: str):
         pass
+
+
+if __name__ == "__main__":
+    # authentication = OpenLPAuthentication("http://192.168.50.165:4316/","openlp","TestPassword")
+    authentication = OpenLPAuthentication("http://localhost:4316/","openlp","TestPassword")
+    auth_token = authentication.getAuthenticationToken()
+

@@ -33,7 +33,7 @@ class OpenLPAuthentication:
         headers = {"Authorization" : self.getAuthenticationToken()}
         r = requests.post(self.makeURL(path),json=payload, headers = headers)
         r.raise_for_status()
-        return r.json()
+        # return r.json()
 
 
 class OpenLP:
@@ -54,10 +54,12 @@ class OpenLP:
         return self.authentication.get("controller/live-item")
 
     def controller_show(self, id: str):
-        return self.authentication.post("controller/show",id)
+        payload = {"id":id}
+        return self.authentication.post("controller/show",payload)
 
-    def controller_progress(self):
-        pass
+    def controller_progress(self, action: str):
+        payload = {"action": action}
+        return self.authentication.post("controller/progress",payload)
 
     def controller_theme_level(self) -> Any:
         return self.authentication.get("controller/theme-level")
@@ -99,7 +101,8 @@ class OpenLP:
         pass
 
     def service_progress(self, action: str):
-        pass
+        payload = {"action": action}
+        return self.authentication.post("service/progress",payload)
 
     def service_new(self):
         pass
@@ -140,5 +143,7 @@ if __name__ == "__main__":
     # print (f"TestResult: {openLP.controller_live_item()}")
     # print (f"TestResult: {openLP.controller_themes()}")
     # print (f"TestResult: {openLP.controller_theme_level()}")
-    print (f"TestResult: {openLP.controller_show(0)}")
+    # print (f"TestResult: {openLP.controller_show(0)}")
+    # print (f"TestResult: {openLP.service_progress('next')}")
+    print (f"TestResult: {openLP.controller_progress('next')}")
 

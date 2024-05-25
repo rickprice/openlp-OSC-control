@@ -24,12 +24,16 @@ class OpenLPAuthentication:
         return self.openLP_base_url + "api/v2/"+ path
 
     def get(self,path: str) -> Any:
-        r = requests.get(self.makeURL(path))
+        headers = {"Authorization" : self.getAuthenticationToken()}
+        r = requests.get(self.makeURL(path),headers = headers)
         r.raise_for_status()
         return r.json()
 
     def post(self,path: str, payload: Dict[str,str] ) -> None:
-        pass
+        headers = {"Authorization" : self.getAuthenticationToken()}
+        r = requests.post(self.makeURL(path),json=payload, headers = headers)
+        r.raise_for_status()
+        return r.json()
 
 
 class OpenLP:
@@ -47,13 +51,16 @@ class OpenLP:
         return self.authentication.get("controller/live-items")
 
     def controller_live_item(self) -> Any:
-        pass
+        return self.authentication.get("controller/live-item")
 
     def controller_show(self):
         pass
 
     def controller_progress(self):
         pass
+
+    def controller_theme_level(self) -> Any:
+        return self.authentication.get("controller/theme-level")
 
     def controller_themes(self) -> Any:
         return self.authentication.get("controller/themes")
@@ -129,6 +136,8 @@ if __name__ == "__main__":
 
     openLP = OpenLP(authentication)
 
+    # print (f"TestResult: {openLP.controller_live_items()}")
     # print (f"TestResult: {openLP.controller_live_item()}")
-    print (f"TestResult: {openLP.controller_themes()}")
+    # print (f"TestResult: {openLP.controller_themes()}")
+    print (f"TestResult: {openLP.controller_theme_level()}")
 

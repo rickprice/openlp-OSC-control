@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict
 import requests
 import json
 
@@ -13,28 +13,26 @@ class OpenLPAuthentication:
         self.authentication_token = None
 
     def getAuthenticationToken(self) -> str:
-        if self.authentication_token is not None:
-            return self.authentication_token
-        else:
-            url = self.openLP_base_url + "api/v2/core/login"
-            # url = self.openLP_base_url + "api/v2/controller/themes"
-            print("Frederick URL: ",url)
+        if self.authentication_token is None:
             auth_data = {"username":self.username,"password":self.password}
-            # r = requests.post(url, data = json.dumps(auth_data))
-            r = requests.post(url, json = auth_data)
-            # r = requests.get(url)
-            if r.status_code == requests.codes.ok:
-                print ("returned data:", r.text)
-                # self.authentication_token = r.json()[0]["authentication_token"]
-            else:
-                print("Got return:",r.status_code,r.text)
-            return self.authentication_token
+            r = requests.post(self.makeURL("core/login"), json = auth_data)
+            r.raise_for_status()
+            self.authentication_token = r.json()["token"]
+        return self.authentication_token
 
-    def getOpenLPBaseURL(self)->str:
-        return self.openLP_base_url
+    def makeURL(self, path: str) -> str:
+        return self.openLP_base_url + "api/v2/"+ path
+
+    def get(self,path: str) -> Any:
+        r = requests.get(self.makeURL(path))
+        r.raise_for_status()
+        return r.json()
+
+    def post(self,path: str, payload: Dict[str,str] ) -> None:
+        pass
 
 
-class OpenLPControl:
+class OpenLP:
     def __init__( self, authentication: OpenLPAuthentication):
         self.authentication = authentication
 
@@ -44,15 +42,9 @@ class OpenLPControl:
         self.plugins_search_options = PluginsSearchOptions()
 
 
-    def ensure_authenticated(self):
-        pass
-
-    def authenticate(self):
-        pass
-
     # API to talk to OpenLP: https://gitlab.com/openlp/wiki/-/wikis/Documentation/HTTP-API
     def controller_live_items(self) -> Any:
-        pass
+        return self.authentication.get("controller/live-items")
 
     def controller_live_item(self) -> Any:
         pass
@@ -64,7 +56,7 @@ class OpenLPControl:
         pass
 
     def controller_themes(self) -> Any:
-        pass
+        return self.authentication.get("controller/themes")
 
     def controller_theme(self, theme_name: str):
         pass
@@ -131,7 +123,12 @@ class PluginsSearchOptions:
 
 
 if __name__ == "__main__":
-    # authentication = OpenLPAuthentication("http://192.168.50.165:4316/","openlp","TestPassword")
     authentication = OpenLPAuthentication("http://localhost:4316/","openlp","TestPassword")
-    auth_token = authentication.getAuthenticationToken()
+    # auth_token = authentication.getAuthenticationToken()
+    # print ("Received auth token:",auth_token)
+
+    openLP = OpenLP(authentication)
+
+    # print (f"TestResult: {openLP.controller_live_item()}")
+    print (f"TestResult: {openLP.controller_themes()}")
 

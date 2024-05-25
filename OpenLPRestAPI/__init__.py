@@ -68,16 +68,17 @@ class OpenLP:
         return self.authentication.get("controller/themes")
 
     def controller_theme(self, theme_name: str):
-        pass
+        return self.authentication.get(f"controller/themes/{theme_name}")
 
     def controller_live_theme(self) -> Any:
-        pass
+        return self.authentication.get("controller/live-theme")
 
     def controller_clear(self, controller_name: str):
-        pass
+        return self.authentication.post("controller/clear/{controller_name}", None)
 
     def core_display(self, display_mode: str):
-        pass
+        payload = {"display":display_mode}
+        return self.authentication.post("core/display",payload)
 
     def core_plugins(self) -> Any:
         pass
@@ -145,5 +146,6 @@ if __name__ == "__main__":
     # print (f"TestResult: {openLP.controller_theme_level()}")
     # print (f"TestResult: {openLP.controller_show(0)}")
     # print (f"TestResult: {openLP.service_progress('next')}")
-    print (f"TestResult: {openLP.controller_progress('next')}")
+    # print (f"TestResult: {openLP.controller_progress('next')}")
+    print (f"TestResult: {openLP.core_display('show')}")
 

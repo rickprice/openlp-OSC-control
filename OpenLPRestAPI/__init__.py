@@ -29,7 +29,7 @@ class OpenLPAuthentication:
         r.raise_for_status()
         return r.json()
 
-    def post(self,path: str, payload: Dict[str,str] ) -> None:
+    def post(self,path: str, payload: Any ) -> None:
         headers = {"Authorization" : self.getAuthenticationToken()}
         r = requests.post(self.makeURL(path),json=payload, headers = headers)
         r.raise_for_status()
@@ -53,8 +53,8 @@ class OpenLP:
     def controller_live_item(self) -> Any:
         return self.authentication.get("controller/live-item")
 
-    def controller_show(self):
-        pass
+    def controller_show(self, id: str):
+        return self.authentication.post("controller/show",id)
 
     def controller_progress(self):
         pass
@@ -139,5 +139,6 @@ if __name__ == "__main__":
     # print (f"TestResult: {openLP.controller_live_items()}")
     # print (f"TestResult: {openLP.controller_live_item()}")
     # print (f"TestResult: {openLP.controller_themes()}")
-    print (f"TestResult: {openLP.controller_theme_level()}")
+    # print (f"TestResult: {openLP.controller_theme_level()}")
+    print (f"TestResult: {openLP.controller_show(0)}")
 

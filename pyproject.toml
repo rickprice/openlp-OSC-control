@@ -27,6 +27,6 @@ openLPOSCControl = "openLPOSCControl:main"
 exclude = [".gitignore"]
 
 [tool.setuptools_scm]
-write_to = "src/_version.py"
+write_to = "src/OpenLPOSCControl/_version.py"
 
 

@@ -1,9 +1,8 @@
 from typing import Any, Dict
 import requests
-import json
+# import json
 
 # from requests.models import auth
-
 
 class OpenLPAuthentication:
     def __init__(self, openLP_base_url: str, username: str, password: str) -> None:

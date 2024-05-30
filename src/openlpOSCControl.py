@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 # from typing import Any, Dict
 
 import OpenLPRestAPI as OLP
@@ -37,12 +39,12 @@ def print_handler(address, *args):
     print(f"{address}: {args}")
 
 def default_handler(address, *args):
-    print(f"DEFAULT {address}: {args}")
+    print(f"DEFAULT (unhandled): {address}: {args}")
 
 
 dispatcher = Dispatcher()
-dispatcher.map("/OpenLP/core/display/*", OpenLP_core_display)
-dispatcher.map("/OpenLP/controller/progress/*", OpenLP_controller_progress)
+dispatcher.map("/OpenLP/core/display", OpenLP_core_display)
+dispatcher.map("/OpenLP/controller/progress", OpenLP_controller_progress)
 dispatcher.set_default_handler(default_handler)
 
 ip = "127.0.0.1"

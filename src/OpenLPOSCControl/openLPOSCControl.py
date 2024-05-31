@@ -7,17 +7,26 @@ from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 
 
+global openLP
 
-global OpenLP
-
-openLP = None
-
-if __name__ == "__main__":
+def main():
     authentication = OLP.OpenLPAuthentication("http://localhost:4316/","openlp","TestPassword")
     # auth_token = authentication.getAuthenticationToken()
     # print ("Received auth token:",auth_token)
 
     openLP = OLP.OpenLP(authentication)
+
+    dispatcher = Dispatcher()
+    dispatcher.map("/OpenLP/core/display", OpenLP_core_display)
+    dispatcher.map("/OpenLP/controller/progress", OpenLP_controller_progress)
+    dispatcher.set_default_handler(default_handler)
+
+    ip = "127.0.0.1"
+    port = 1337
+
+    server = BlockingOSCUDPServer((ip, port), dispatcher)
+    server.serve_forever()  # Blocks forever
+
 
     # print (f"TestResult: {openLP.controller_live_items()}")
     # print (f"TestResult: {openLP.controller_live_item()}")
@@ -29,7 +38,7 @@ if __name__ == "__main__":
     # print (f"TestResult: {openLP.core_display('hide')}")
     # print (f"TestResult: {openLP.core_display('show')}")
 
-def OpenLP_core_display(address, *args):
+def OpenLP_core_display(_address, *args):
     openLP.core_display(args[0])
 
 def OpenLP_controller_progress(_address, *args):
@@ -42,14 +51,6 @@ def default_handler(address, *args):
     print(f"DEFAULT (unhandled): {address}: {args}")
 
 
-dispatcher = Dispatcher()
-dispatcher.map("/OpenLP/core/display", OpenLP_core_display)
-dispatcher.map("/OpenLP/controller/progress", OpenLP_controller_progress)
-dispatcher.set_default_handler(default_handler)
 
-ip = "127.0.0.1"
-port = 1337
-
-server = BlockingOSCUDPServer((ip, port), dispatcher)
-server.serve_forever()  # Blocks forever
-
+if __name__ == "__main__":
+    main()

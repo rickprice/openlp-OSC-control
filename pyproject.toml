@@ -21,7 +21,7 @@ Home = "https://github.com/rickprice/openlp-OSC-control"
 Issues = "https://github.com/rickprice/openlp-OSC-control/issues"
 
 [project.scripts]
-openLPOSCControl = "openLPOSCControl:main"
+openLPOSCControl = "OpenLPOSCControl.openLPOSCControl:main"
 
 [tool.flit.sdist]
 exclude = [".gitignore"]

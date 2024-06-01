@@ -10,6 +10,8 @@ from pythonosc.osc_server import BlockingOSCUDPServer
 global openLP
 
 def main():
+    global openLP
+
     authentication = OLP.OpenLPAuthentication("http://localhost:4316/","openlp","TestPassword")
     # auth_token = authentication.getAuthenticationToken()
     # print ("Received auth token:",auth_token)
@@ -39,15 +41,19 @@ def main():
     # print (f"TestResult: {openLP.core_display('show')}")
 
 def OpenLP_core_display(_address, *args):
+    global openLP
     openLP.core_display(args[0])
 
 def OpenLP_controller_progress(_address, *args):
+    global openLP
     openLP.controller_progress(args[0])
 
 def print_handler(address, *args):
+    global openLP
     print(f"{address}: {args}")
 
 def default_handler(address, *args):
+    global openLP
     print(f"DEFAULT (unhandled): {address}: {args}")
 
 

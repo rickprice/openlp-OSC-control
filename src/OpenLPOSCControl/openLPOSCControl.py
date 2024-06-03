@@ -5,12 +5,21 @@
 from OpenLPOSCControl import OpenLPRestAPI as OLP
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
+import argparse
 
 
 global openLP
 
 def main():
     global openLP
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--OpenLP_REST_URL', help='URL for OpenLP REST API', default = "http://localhost:4316/")
+    parser.add_argument('--ListenIP', help='IP address to listen on', default = "127.0.0.1")
+    parser.add_argument('--ListenPort', help='Port to listen on', default = 1337, type = int)
+    parser.add_argument('--OpenLPUsername', help='Username to log into OpenLP as', default = "openlp")
+    parser.add_argument('--OpenLPPassword', help='Password to log into OpenLP as', default = "6d22f1af18ffd70")
+    args = parser.parse_args()
 
     print("Starting up OpenLP OSC -> REST converter")
 

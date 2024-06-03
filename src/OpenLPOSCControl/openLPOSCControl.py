@@ -2,7 +2,7 @@
 
 # from typing import Any, Dict
 
-import OpenLPRestAPI as OLP
+from OpenLPOSCControl import OpenLPRestAPI as OLP
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 

@@ -21,6 +21,8 @@ def main():
     parser.add_argument('--OpenLPPassword', help='Password to log into OpenLP as', default = "6d22f1af18ffd70")
     args = parser.parse_args()
 
+    print("args is: {args}")
+
     print("Starting up OpenLP OSC -> REST converter")
 
     authentication = OLP.OpenLPAuthentication("http://localhost:4316/","openlp","TestPassword")

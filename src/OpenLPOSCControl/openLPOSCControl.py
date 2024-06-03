@@ -21,13 +21,15 @@ def main():
     parser.add_argument('--OpenLPPassword', help='Password to log into OpenLP as', default = "6d22f1af18ffd70")
     args = parser.parse_args()
 
-    print(f"args is: {args}")
+    # print(f"args is: {args}")
 
     print("Starting up OpenLP OSC -> REST converter")
 
-    authentication = OLP.OpenLPAuthentication("http://localhost:4316/","openlp","TestPassword")
-    # auth_token = authentication.getAuthenticationToken()
-    # print ("Received auth token:",auth_token)
+    authentication = OLP.OpenLPAuthentication(args["OpenLP_REST_URL"],args["OpenLPUsername"],args["OpenLPPassword"])
+
+    # FIX: Comment this out
+    auth_token = authentication.getAuthenticationToken()
+    print ("Received auth token:",auth_token)
 
     openLP = OLP.OpenLP(authentication)
 
@@ -36,8 +38,8 @@ def main():
     dispatcher.map("/OpenLP/controller/progress", OpenLP_controller_progress)
     dispatcher.set_default_handler(default_handler)
 
-    ip = "127.0.0.1"
-    port = 1337
+    ip = args["ListenIP"]
+    port = args["ListenPort"]
 
     server = BlockingOSCUDPServer((ip, port), dispatcher)
     server.serve_forever()  # Blocks forever

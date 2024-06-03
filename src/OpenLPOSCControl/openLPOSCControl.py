@@ -42,18 +42,20 @@ def main():
     # print (f"TestResult: {openLP.core_display('hide')}")
     # print (f"TestResult: {openLP.core_display('show')}")
 
-def OpenLP_core_display(_address, *args):
+def OpenLP_core_display(address, *args):
     global openLP
+    print(f"core_display: {address}: {args}")
     openLP.core_display(args[0])
 
-def OpenLP_controller_progress(_address, *args):
+def OpenLP_controller_progress(address, *args):
     global openLP
+    print(f"core_progress: {address}: {args}")
     openLP.controller_progress(args[0])
 
-def print_handler(address, *args):
-    global openLP
-    print(f"{address}: {args}")
-
+# def print_handler(address, *args):
+#     global openLP
+#     print(f"{address}: {args}")
+#
 def default_handler(address, *args):
     global openLP
     print(f"DEFAULT (unhandled): {address}: {args}")

@@ -12,6 +12,8 @@ global openLP
 def main():
     global openLP
 
+    print("Starting up OpenLP OSC -> REST converter")
+
     authentication = OLP.OpenLPAuthentication("http://localhost:4316/","openlp","TestPassword")
     # auth_token = authentication.getAuthenticationToken()
     # print ("Received auth token:",auth_token)

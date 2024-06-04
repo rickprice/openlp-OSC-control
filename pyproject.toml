@@ -11,8 +11,8 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
-    "Multimedia::Sound/Audio",
-    "System::Networking"
+    "Multimedia :: Sound/Audio",
+    "System :: Networking"
 ]
 dynamic = ["description"]
 requires-python = "~=3.8"

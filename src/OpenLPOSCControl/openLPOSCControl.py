@@ -27,8 +27,9 @@ def main():
 
     authentication = OLP.OpenLPAuthentication(args.OpenLP_REST_URL,args.OpenLPUsername,args.OpenLPPassword)
 
-    auth_token = authentication.getAuthenticationToken()
-    print ("Received auth token:",auth_token)
+    # NOTE: Because OpenLP seems to start slowly, don't grab an initial auth token at program startup
+    # auth_token = authentication.getAuthenticationToken()
+    # print ("Received auth token:",auth_token)
 
     openLP = OLP.OpenLP(authentication)
 

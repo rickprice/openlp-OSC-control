@@ -25,9 +25,8 @@ def main():
 
     print("Starting up OpenLP OSC -> REST converter")
 
-    authentication = OLP.OpenLPAuthentication(args["OpenLP_REST_URL"],args["OpenLPUsername"],args["OpenLPPassword"])
+    authentication = OLP.OpenLPAuthentication(args.OpenLP_REST_URL,args.OpenLPUsername,args.OpenLPPassword)
 
-    # FIX: Comment this out
     auth_token = authentication.getAuthenticationToken()
     print ("Received auth token:",auth_token)
 
@@ -38,8 +37,8 @@ def main():
     dispatcher.map("/OpenLP/controller/progress", OpenLP_controller_progress)
     dispatcher.set_default_handler(default_handler)
 
-    ip = args["ListenIP"]
-    port = args["ListenPort"]
+    ip = args.ListenIP
+    port = args.ListenPort
 
     server = BlockingOSCUDPServer((ip, port), dispatcher)
     server.serve_forever()  # Blocks forever

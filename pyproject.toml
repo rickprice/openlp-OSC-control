@@ -2,7 +2,7 @@
 build-backend = "flit"
 
 [project]
-version = "0.1.0"
+version = "0.1.1"
 name = "OpenLPOSCControl"
 authors = [{name = "Frederick Price", email = "fprice@pricemail.ca"}]
 readme = "README.md"
@@ -11,6 +11,8 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
+    "Multimedia::Sound/Audio",
+    "System::Networking"
 ]
 dynamic = ["description"]
 requires-python = "~=3.8"

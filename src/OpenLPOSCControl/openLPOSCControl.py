@@ -40,6 +40,9 @@ def main():
     ip = args.ListenIP
     port = args.ListenPort
 
+    print ("Listening on IP:",ip)
+    print ("Listening on Port:",port)
+
     server = BlockingOSCUDPServer((ip, port), dispatcher)
     server.serve_forever()  # Blocks forever
 

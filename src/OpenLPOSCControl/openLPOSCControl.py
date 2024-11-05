@@ -3,6 +3,7 @@
 # from typing import Any, Dict
 
 import argparse
+import configparser
 
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
@@ -27,7 +28,8 @@ def main():
     parser.add_argument(
         "--OpenLPConfigurationFile",
         help="OpenLP configuration file, try reading the values directly",
-        default="~/.config/openlp.org.conf",
+        # default="~/.config/openlp.org.conf",
+        default="/home/fprice/.config/openlp.org.conf",
     )
     args = parser.parse_args()
 
@@ -37,6 +39,13 @@ def main():
 
     if args.OpenLPConfigurationFile is not None:
         print(f"Attempting to read OpenLP configuration file at [{args.OpenLPConfigurationFile}]")
+        config = configparser.ConfigParser()
+        config.read(args.OpenLPConfigurationFile)
+
+        print(f"Sections: {config.sections()}")
+
+        ipAddress = config['api']['ip%20address']
+        print(f"IP Address: {ipAddress}")
 
     authentication = OLP.OpenLPAuthentication(
         args.OpenLP_REST_URL, args.OpenLPUsername, args.OpenLPPassword

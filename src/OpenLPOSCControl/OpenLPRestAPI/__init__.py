@@ -1,8 +1,10 @@
 from typing import Any, Dict
 import requests
+
 # import json
 
 # from requests.models import auth
+
 
 class OpenLPAuthentication:
     def __init__(self, openLP_base_url: str, username: str, password: str) -> None:
@@ -13,37 +15,36 @@ class OpenLPAuthentication:
 
     def getAuthenticationToken(self) -> str:
         if self.authentication_token is None:
-            auth_data = {"username":self.username,"password":self.password}
-            r = requests.post(self.makeURL("core/login"), json = auth_data)
+            auth_data = {"username": self.username, "password": self.password}
+            r = requests.post(self.makeURL("core/login"), json=auth_data)
             r.raise_for_status()
             self.authentication_token = r.json()["token"]
         return self.authentication_token
 
     def makeURL(self, path: str) -> str:
-        return self.openLP_base_url + "api/v2/"+ path
+        return self.openLP_base_url + "api/v2/" + path
 
-    def get(self,path: str) -> Any:
-        headers = {"Authorization" : self.getAuthenticationToken()}
-        r = requests.get(self.makeURL(path),headers = headers)
+    def get(self, path: str) -> Any:
+        headers = {"Authorization": self.getAuthenticationToken()}
+        r = requests.get(self.makeURL(path), headers=headers)
         r.raise_for_status()
         return r.json()
 
-    def post(self,path: str, payload: Any ) -> None:
-        headers = {"Authorization" : self.getAuthenticationToken()}
-        r = requests.post(self.makeURL(path),json=payload, headers = headers)
+    def post(self, path: str, payload: Any) -> None:
+        headers = {"Authorization": self.getAuthenticationToken()}
+        r = requests.post(self.makeURL(path), json=payload, headers=headers)
         r.raise_for_status()
         # return r.json()
 
 
 class OpenLP:
-    def __init__( self, authentication: OpenLPAuthentication):
+    def __init__(self, authentication: OpenLPAuthentication):
         self.authentication = authentication
 
         self.controller_themeLevel = ControllerThemeLevel()
         self.controller_currentTheme = ControllerCurrentTheme()
 
         self.plugins_search_options = PluginsSearchOptions()
-
 
     # API to talk to OpenLP: https://gitlab.com/openlp/wiki/-/wikis/Documentation/HTTP-API
     def controller_live_items(self) -> Any:
@@ -53,12 +54,12 @@ class OpenLP:
         return self.authentication.get("controller/live-item")
 
     def controller_show(self, id: str):
-        payload = {"id":id}
-        return self.authentication.post("controller/show",payload)
+        payload = {"id": id}
+        return self.authentication.post("controller/show", payload)
 
     def controller_progress(self, action: str):
         payload = {"action": action}
-        return self.authentication.post("controller/progress",payload)
+        return self.authentication.post("controller/progress", payload)
 
     def controller_theme_level(self) -> Any:
         return self.authentication.get("controller/theme-level")
@@ -76,8 +77,8 @@ class OpenLP:
         return self.authentication.post("controller/clear/{controller_name}", None)
 
     def core_display(self, display_mode: str):
-        payload = {"display":display_mode}
-        return self.authentication.post("core/display",payload)
+        payload = {"display": display_mode}
+        return self.authentication.post("core/display", payload)
 
     def core_plugins(self) -> Any:
         pass
@@ -102,7 +103,7 @@ class OpenLP:
 
     def service_progress(self, action: str):
         payload = {"action": action}
-        return self.authentication.post("service/progress",payload)
+        return self.authentication.post("service/progress", payload)
 
     def service_new(self):
         pass
@@ -133,7 +134,9 @@ class PluginsSearchOptions:
 
 
 if __name__ == "__main__":
-    authentication = OpenLPAuthentication("http://localhost:4316/","openlp","TestPassword")
+    authentication = OpenLPAuthentication(
+        "http://localhost:4316/", "openlp", "TestPassword"
+    )
     # auth_token = authentication.getAuthenticationToken()
     # print ("Received auth token:",auth_token)
 
@@ -146,5 +149,4 @@ if __name__ == "__main__":
     # print (f"TestResult: {openLP.controller_show(0)}")
     # print (f"TestResult: {openLP.service_progress('next')}")
     # print (f"TestResult: {openLP.controller_progress('next')}")
-    print (f"TestResult: {openLP.core_display('show')}")
-
+    print(f"TestResult: {openLP.core_display('show')}")

@@ -35,6 +35,9 @@ def main():
 
     print("Starting up OpenLP OSC -> REST converter")
 
+    if args.OpenLPConfigurationFile is not None:
+        print(f"Attempting to read OpenLP configuration file at [{args.OpenLPConfigurationFile}]")
+
     authentication = OLP.OpenLPAuthentication(
         args.OpenLP_REST_URL, args.OpenLPUsername, args.OpenLPPassword
     )

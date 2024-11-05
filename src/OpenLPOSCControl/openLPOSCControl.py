@@ -2,11 +2,12 @@
 
 # from typing import Any, Dict
 
-from OpenLPOSCControl import OpenLPRestAPI as OLP
-from pythonosc.dispatcher import Dispatcher
-from pythonosc.osc_server import BlockingOSCUDPServer
 import argparse
 
+from pythonosc.dispatcher import Dispatcher
+from pythonosc.osc_server import BlockingOSCUDPServer
+
+from OpenLPOSCControl import OpenLPRestAPI as OLP
 
 global openLP
 
@@ -18,22 +19,11 @@ def main():
     parser.add_argument(
         "--OpenLP_REST_URL",
         help="URL for OpenLP REST API",
-        default="http://localhost:4316/",
     )
-    parser.add_argument(
-        "--ListenIP", help="IP address to listen on", default="127.0.0.1"
-    )
-    parser.add_argument(
-        "--ListenPort", help="Port to listen on", default=1337, type=int
-    )
-    parser.add_argument(
-        "--OpenLPUsername", help="Username to log into OpenLP as", default="openlp"
-    )
-    parser.add_argument(
-        "--OpenLPPassword",
-        help="Password to log into OpenLP as",
-        default="6d22f1af18ffd70",
-    )
+    parser.add_argument("--ListenIP", help="IP address to listen on")
+    parser.add_argument("--ListenPort", help="Port to listen on", type=int)
+    parser.add_argument("--OpenLPUsername", help="Username to log into OpenLP")
+    parser.add_argument("--OpenLPPassword", help="Password to log into OpenLP")
     parser.add_argument(
         "--OpenLPConfigurationFile",
         help="OpenLP configuration file, try reading the values directly",
@@ -49,7 +39,8 @@ def main():
         args.OpenLP_REST_URL, args.OpenLPUsername, args.OpenLPPassword
     )
 
-    # NOTE: Because OpenLP seems to start slowly, don't grab an initial auth token at program startup
+    # NOTE: Because OpenLP seems to start slowly, don't grab an initial
+    # auth token at program startup
     # auth_token = authentication.getAuthenticationToken()
     # print ("Received auth token:",auth_token)
 

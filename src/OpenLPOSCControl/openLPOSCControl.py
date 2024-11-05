@@ -45,7 +45,13 @@ def main():
         print(f"Sections: {config.sections()}")
 
         ipAddress = config['api']['ip%20address']
+        authenticationEnabled = config['api']['authentication%20enabled']
+        userID = config['api']['user%20id']
+        password = config['api']['password']
         print(f"IP Address: {ipAddress}")
+        print(f"AuthenticationEnabled: {authenticationEnabled}")
+        print(f"userID: {userID}")
+        print(f"password: {password}")
 
     authentication = OLP.OpenLPAuthentication(
         args.OpenLP_REST_URL, args.OpenLPUsername, args.OpenLPPassword

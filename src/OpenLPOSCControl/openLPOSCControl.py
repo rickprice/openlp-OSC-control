@@ -22,7 +22,10 @@ def main():
         help="URL for OpenLP REST API",
     )
     parser.add_argument("--ListenIP", help="IP address to listen on")
-    parser.add_argument("--ListenPort", help="Port to listen on", type=int)
+    parser.add_argument(
+        "--ListenPort", help="Port to listen on", type=int, default=1337
+    )
+    parser.add_argument("--OpenLPAuthenticationEnabled", type=bool, help="Is OpenLPAuthentication Enabled")
     parser.add_argument("--OpenLPUsername", help="Username to log into OpenLP")
     parser.add_argument("--OpenLPPassword", help="Password to log into OpenLP")
     parser.add_argument(
@@ -38,20 +41,48 @@ def main():
     print("Starting up OpenLP OSC -> REST converter")
 
     if args.OpenLPConfigurationFile is not None:
-        print(f"Attempting to read OpenLP configuration file at [{args.OpenLPConfigurationFile}]")
+        print(
+            f"Attempting to read OpenLP configuration file at [{args.OpenLPConfigurationFile}]"
+        )
         config = configparser.ConfigParser()
         config.read(args.OpenLPConfigurationFile)
 
-        print(f"Sections: {config.sections()}")
+        # print(f"Sections: {config.sections()}")
 
-        ipAddress = config['api']['ip%20address']
-        authenticationEnabled = config['api']['authentication%20enabled']
-        userID = config['api']['user%20id']
-        password = config['api']['password']
-        print(f"IP Address: {ipAddress}")
-        print(f"AuthenticationEnabled: {authenticationEnabled}")
-        print(f"userID: {userID}")
-        print(f"password: {password}")
+        ipAddress = config["api"]["ip%20address"]
+        if args.OpenLPAuthenticationEnabled is None:
+            args.OpenLPAuthenticationEnabled = config["api"]["authentication%20enabled"]
+        userID = config["api"]["user%20id"]
+        password = config["api"]["password"]
+
+        # We listen on the same IP as OpenLP to keep things simple
+        if args.ListenIP is None:
+            args.ListenIP = ipAddress
+
+        # use OpenLP values as defaults
+        if args.OpenLP_REST_URL is None:
+            args.OpenLP_REST_URL = f"http://{ipAddress}:4316/"
+
+        if args.OpenLPAuthenticationEnabled:
+            if args.OpenLPUsername is None:
+                args.OpenLPUsername = userID
+            if args.OpenLPPassword is None:
+                args.OpenLPPassword = password
+
+    else:
+        if args.ListenIP is None:
+            args.ListenIP = "127.0.0.1"
+        if args.OpenLP_REST_URL is None:
+            args.OpenLP_REST_URL = "http://{args.ListenIP}:4316/"
+
+    print(f"Our Listen IP Address: {args.ListenIP}")
+    print(f"Our Listen Port: {args.ListenPort}")
+    print()
+    print(f"OpenLP AuthenticationEnabled: {args.OpenLPAuthenticationEnabled}")
+    print(f"OpenLP userID: {args.OpenLPUsername}")
+    print(f"OpenLP password: {args.OpenLPPassword}")
+    print(f"OpenLP REST URL: {args.OpenLP_REST_URL}")
+    print()
 
     authentication = OLP.OpenLPAuthentication(
         args.OpenLP_REST_URL, args.OpenLPUsername, args.OpenLPPassword

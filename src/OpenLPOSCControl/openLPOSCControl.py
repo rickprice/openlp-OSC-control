@@ -4,13 +4,19 @@
 
 import argparse
 import configparser
+import logging
 
+from cysystemd import journal
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 
 from OpenLPOSCControl import OpenLPRestAPI as OLP
 
 global openLP
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger()
+logger.addHandler(journal.JournaldLogHandler())
 
 
 def main():
@@ -25,7 +31,11 @@ def main():
     parser.add_argument(
         "--ListenPort", help="Port to listen on", type=int, default=1337
     )
-    parser.add_argument("--OpenLPAuthenticationEnabled", type=bool, help="Is OpenLPAuthentication Enabled")
+    parser.add_argument(
+        "--OpenLPAuthenticationEnabled",
+        type=bool,
+        help="Is OpenLPAuthentication Enabled",
+    )
     parser.add_argument("--OpenLPUsername", help="Username to log into OpenLP")
     parser.add_argument("--OpenLPPassword", help="Password to log into OpenLP")
     parser.add_argument(
@@ -38,10 +48,10 @@ def main():
 
     # print(f"args is: {args}")
 
-    print("Starting up OpenLP OSC -> REST converter")
+    logger.info("Starting up OpenLP OSC -> REST converter")
 
     if args.OpenLPConfigurationFile is not None:
-        print(
+        logger.info(
             f"Attempting to read OpenLP configuration file at [{args.OpenLPConfigurationFile}]"
         )
         config = configparser.ConfigParser()
@@ -75,14 +85,12 @@ def main():
         if args.OpenLP_REST_URL is None:
             args.OpenLP_REST_URL = "http://{args.ListenIP}:4316/"
 
-    print(f"Our Listen IP Address: {args.ListenIP}")
-    print(f"Our Listen Port: {args.ListenPort}")
-    print()
-    print(f"OpenLP AuthenticationEnabled: {args.OpenLPAuthenticationEnabled}")
-    print(f"OpenLP userID: {args.OpenLPUsername}")
-    print(f"OpenLP password: {args.OpenLPPassword}")
-    print(f"OpenLP REST URL: {args.OpenLP_REST_URL}")
-    print()
+    logger.info(f"Our Listen IP Address: {args.ListenIP}")
+    logger.info(f"Our Listen Port: {args.ListenPort}")
+    logger.info(f"OpenLP AuthenticationEnabled: {args.OpenLPAuthenticationEnabled}")
+    logger.info(f"OpenLP userID: {args.OpenLPUsername}")
+    logger.info(f"OpenLP password: {args.OpenLPPassword}")
+    logger.info(f"OpenLP REST URL: {args.OpenLP_REST_URL}")
 
     authentication = OLP.OpenLPAuthentication(
         args.OpenLP_REST_URL, args.OpenLPUsername, args.OpenLPPassword
@@ -103,8 +111,8 @@ def main():
     ip = args.ListenIP
     port = args.ListenPort
 
-    print("Listening on IP:", ip)
-    print("Listening on Port:", port)
+    logger.info(f"Listening on IP: {ip}")
+    logger.info(f"Listening on Port: {port}")
 
     server = BlockingOSCUDPServer((ip, port), dispatcher)
     server.serve_forever()  # Blocks forever
@@ -122,13 +130,13 @@ def main():
 
 def OpenLP_core_display(address, *args):
     global openLP
-    print(f"core_display: {address}: {args}")
+    logger.info(f"core_display: {address}: {args}")
     openLP.core_display(args[0])
 
 
 def OpenLP_controller_progress(address, *args):
     global openLP
-    print(f"core_progress: {address}: {args}")
+    logger.info(f"core_progress: {address}: {args}")
     openLP.controller_progress(args[0])
 
 
@@ -138,7 +146,7 @@ def OpenLP_controller_progress(address, *args):
 #
 def default_handler(address, *args):
     global openLP
-    print(f"DEFAULT (unhandled): {address}: {args}")
+    logger.info(f"DEFAULT (unhandled): {address}: {args}")
 
 
 if __name__ == "__main__":

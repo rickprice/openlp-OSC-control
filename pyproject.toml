@@ -3,7 +3,7 @@ requires = ["flit_core >= 3.4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-version = "0.1.4"
+version = "0.1.5"
 name = "OpenLPOSCControl"
 authors = [{name = "Frederick Price", email = "fprice@pricemail.ca"}]
 readme = "README.md"
@@ -17,7 +17,7 @@ classifiers = [
 ]
 dynamic = ["description"]
 requires-python = "~=3.8"
-dependencies = [ "python-osc", "requests", "typing"]
+dependencies = [ "python-osc", "requests", "typing", "cysystemd"]
 
 [project.urls]
 Home = "https://github.com/rickprice/openlp-OSC-control"

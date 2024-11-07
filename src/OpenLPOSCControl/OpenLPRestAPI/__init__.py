@@ -1,10 +1,16 @@
-from typing import Any, Dict
+import logging
+from typing import Any
 
 import requests
+from cysystemd import journal
+from pythonosc.dispatcher import Dispatcher
+from pythonosc.osc_server import BlockingOSCUDPServer
 
-# import json
+from OpenLPOSCControl import OpenLPRestAPI as OLP
 
-# from requests.models import auth
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger()
+logger.addHandler(journal.JournaldLogHandler())
 
 
 class OpenLPAuthentication:
@@ -49,9 +55,11 @@ class OpenLP:
 
     # API to talk to OpenLP: https://gitlab.com/openlp/wiki/-/wikis/Documentation/HTTP-API
     def controller_live_items(self) -> Any:
+        logger.info("Called: controller/live-items")
         return self.authentication.get("controller/live-items")
 
     def controller_live_item(self) -> Any:
+        logger.info("Called: controller/live-item")
         return self.authentication.get("controller/live-item")
 
     def controller_show(self, id: str):

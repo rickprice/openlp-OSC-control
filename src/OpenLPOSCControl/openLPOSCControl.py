@@ -71,7 +71,13 @@ def main():
 
         # use OpenLP values as defaults
         if args.OpenLP_REST_URL is None:
-            args.OpenLP_REST_URL = f"http://{ipAddress}:4316/"
+            if args.ListenIP == "0.0.0.0":
+                logger.info(
+                    f"Can's use ListenIP of 0.0.0.0 to talk to OpenLP, switching to localhost."
+                )
+                args.OpenLP_REST_URL = "http://127.0.0.1:4316/"
+            else:
+                args.OpenLP_REST_URL = f"http://{args.ListenIP}:4316/"
 
         if args.OpenLPAuthenticationEnabled:
             if args.OpenLPUsername is None:

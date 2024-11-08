@@ -64,12 +64,12 @@ class OpenLP:
 
     def controller_show(self, id: str):
         payload = {"id": id}
-        logger.info("Called: controller/show [{payload}]")
+        logger.info(f"Called: controller/show [{payload}]")
         return self.authentication.post("controller/show", payload)
 
     def controller_progress(self, action: str):
         payload = {"action": action}
-        logger.info("Called: controller/progress [{payload}]")
+        logger.info(f"Called: controller/progress [{payload}]")
         return self.authentication.post("controller/progress", payload)
 
     def controller_theme_level(self) -> Any:
@@ -94,7 +94,7 @@ class OpenLP:
 
     def core_display(self, display_mode: str):
         payload = {"display": display_mode}
-        logger.info("Called: core/display [{payload}]")
+        logger.info(f"Called: core/display [{payload}]")
         return self.authentication.post("core/display", payload)
 
     def core_plugins(self) -> Any:
@@ -120,7 +120,7 @@ class OpenLP:
 
     def service_progress(self, action: str):
         payload = {"action": action}
-        logger.info("Called: service/progress [{payload}]")
+        logger.info(f"Called: service/progress [{payload}]")
         return self.authentication.post("service/progress", payload)
 
     def service_new(self):
